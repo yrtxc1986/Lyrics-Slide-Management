@@ -1,12 +1,19 @@
 package idv.wilson.church.lyricsslidemanagement.tools.slide.poiImpl;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.geom.Rectangle2D;
 import java.nio.file.Path;
 
+import org.apache.poi.sl.usermodel.VerticalAlignment;
+import org.apache.poi.sl.usermodel.TextParagraph.TextAlign;
 import org.apache.poi.xslf.usermodel.SlideLayout;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.apache.poi.xslf.usermodel.XSLFSlideLayout;
 import org.apache.poi.xslf.usermodel.XSLFSlideMaster;
+import org.apache.poi.xslf.usermodel.XSLFTextParagraph;
+import org.apache.poi.xslf.usermodel.XSLFTextRun;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
 
 import idv.wilson.church.lyricsslidemanagement.tools.slide.Slide;
@@ -17,10 +24,16 @@ public class SlideImpl implements Slide {
     private XMLSlideShow ppt;
     private Path orgPath;
 
-    public XMLSlideShow getRaw(){
+    public static Slide createNew(Path file) {
+        XMLSlideShow ppt = new XMLSlideShow();
+        return new SlideImpl(ppt, file);
+    }
+
+    public XMLSlideShow getRaw() {
         return ppt;
     }
-    public Path getOrgPath(){
+
+    public Path getOrgPath() {
         return orgPath;
     }
 
@@ -30,22 +43,51 @@ public class SlideImpl implements Slide {
     }
 
     public void addPage(String content) {
-        
-        // XSLFSlide blankSlide = ppt.createSlide();
-        
+
+        XSLFSlide slide = createSlide(ppt);
+
+        XSLFTextShape body = slide.getPlaceholder(0);
+        addNewLine(body, "1 First paragraph");
+        addNewLine(body, "2 Second paragraph");
+        addNewLine(body, "3 Third paragraph");
+        addNewLine(body, "4 Third paragraph");
+        addNewLine(body, "5 Third paragraph");
+        // body2.addNewTextParagraph().addNewTextRun().setText("First paragraph");
+        // body2.addNewTextParagraph().addNewTextRun().setText("Second paragraph");
+        // body2.addNewTextParagraph().addNewTextRun().setText("Third paragraph");
+
+    }
+
+    private XSLFSlide createSlide(XMLSlideShow ppt) {
+        Double TextMargin = 10d;
         XSLFSlideMaster defaultMaster = ppt.getSlideMasters().get(0);
 
         // title and content
-        XSLFSlideLayout titleBodyLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
-        XSLFSlide slide2 = ppt.createSlide(titleBodyLayout);
-        XSLFTextShape title2 = slide2.getPlaceholder(0);
-        title2.setText("Second Title");
-        XSLFTextShape body2 = slide2.getPlaceholder(1);
-        body2.clearText(); // unset any existing text
-        body2.addNewTextParagraph().addNewTextRun().setText("First paragraph");
-        body2.addNewTextParagraph().addNewTextRun().setText("Second paragraph");
-        body2.addNewTextParagraph().addNewTextRun().setText("Third paragraph");
-        
+        XSLFSlideLayout titleBodyLayout = defaultMaster.getLayout(SlideLayout.TITLE_ONLY);
+        XSLFSlide slide = ppt.createSlide(titleBodyLayout);
+
+        slide.getBackground().setFillColor(Color.BLACK);
+
+        Dimension pageSize = ppt.getPageSize();
+        XSLFTextShape placeholder = slide.getPlaceholder(0);
+        placeholder.setAnchor(new Rectangle2D.Double(TextMargin, TextMargin, pageSize.getWidth() - (2 * TextMargin),
+                pageSize.getHeight() - (2 * TextMargin)));
+
+        placeholder.clearText();
+        placeholder.setVerticalAlignment(VerticalAlignment.TOP);
+
+        return slide;
+    }
+
+    private void addNewLine(XSLFTextShape body, String text) {
+        XSLFTextParagraph paragraph = body.addNewTextParagraph();
+        paragraph.setTextAlign(TextAlign.LEFT);
+
+        XSLFTextRun textRun = paragraph.addNewTextRun();
+
+        textRun.setText(text);
+        textRun.setFontColor(Color.WHITE);
+
     }
 
     public String readText(int page) {

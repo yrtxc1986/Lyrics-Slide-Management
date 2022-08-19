@@ -3,6 +3,7 @@ package idv.wilson.church.lyricsslidemanagement.tools.slide.poiImpl;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class SlideHelperImpl implements SlideHelper {
     }
 
     public Slide newSlide(String fileName) {
-        return null;
+       return SlideImpl.createNew(Paths.get(fileName));
     }
 
     public Slide newSlide(Path location, String fileName) {
