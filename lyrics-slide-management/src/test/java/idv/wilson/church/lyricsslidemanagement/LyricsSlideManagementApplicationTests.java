@@ -5,17 +5,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import idv.wilson.church.lyricsslidemanagement.tools.slide.Slide;
 import idv.wilson.church.lyricsslidemanagement.tools.slide.SlideHelper;
-import idv.wilson.church.lyricsslidemanagement.tools.slide.poiImpl.SlideHelperImpl;
 
 @SpringBootTest
 class LyricsSlideManagementApplicationTests {
 
-
     @Test
     public void addPage(){
-        SlideHelper helper = new SlideHelperImpl();
+        SlideHelper helper = new SlideHelper();
         Slide slide = helper.newSlide("testing.pptx");
-        slide.addPage("Testing Message");
+        slide.addPage(new String[]{"Testing Message", "Line2 Message"});
         helper.saveSlide(slide);
     }
 }
