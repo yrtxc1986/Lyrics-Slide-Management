@@ -64,7 +64,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LyricsItemDetial'
+                $ref: '#/components/schemas/ReurestStatus'
   /lyrics/{id}/download:
     get:
       description: 'download PPTX file'
@@ -98,7 +98,11 @@ paths:
               format: binary
       responses:
         '200':
-          description: 'completed'
+          description: Completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReurestStatus'
 components:
   schemas:
     Id:
@@ -145,7 +149,8 @@ components:
           type: array
           items:
             type: array
+            example: ['主領我到青草地，安歇在溪水旁','黃昏時主與我一路同行，','牧場上主的羊都得飽足心快暢，我是主的羊。']
             items: 
               type: string
-              example: ['主領我到青草地，安歇在溪水旁','黃昏時主與我一路同行，','牧場上主的羊都得飽足心快暢，我是主的羊。']
+              
               
