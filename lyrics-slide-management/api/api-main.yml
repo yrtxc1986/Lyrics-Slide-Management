@@ -58,6 +58,11 @@ paths:
         required: true
         schema:
           $ref: '#/components/schemas/Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LyricsCreateRequest'
       responses:
         '200':
           description: OK
