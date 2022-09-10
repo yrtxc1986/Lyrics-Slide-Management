@@ -1,0 +1,129 @@
+openapi: '3.0.2'
+info:
+  title: API Title
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+
+paths:
+  /lyrics:
+    get:
+      description: 'getList'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LyricsItem'
+    post: 
+      description: 'Create New'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LyricsItemDetial'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReurestStatus'
+  /lyrics/{id}:
+    get:
+      description: 'get Detail'
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Lyrics UUID"
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LyricsItemDetial'
+    put:
+      description: 'update Lyrics'
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Lyrics UUID"
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LyricsItemDetial'
+  /lyrics/{id}/download:
+    get:
+      description: 'download PPTX file'
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Lyrics UUID"
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Download PPTX file
+          content:
+            application/octet-stream: {}
+        '404':
+          description: Id not find in system
+
+components:
+  schemas:
+    ReurestStatus:
+      type: object
+      properties:
+        status: 
+          type: number
+          example: 200
+
+    LyricsItem:
+      type: object
+      required:
+        - name
+        - book
+        - index
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: '我是主的羊'
+        book:
+          type: string
+          example: '青年聖歌 III'
+        index:
+          type: string
+          example: '43'
+    LyricsItemDetial:
+      allOf:
+        - $ref: '#/components/schemas/LyricsItem'
+      properties:
+        pages:
+          type: array
+          items:
+            type: array
+            items: 
+              type: string
+              example: ['主領我到青草地，安歇在溪水旁','黃昏時主與我一路同行，','牧場上主的羊都得飽足心快暢，我是主的羊。']
+              
