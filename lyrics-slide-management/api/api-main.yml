@@ -1,9 +1,9 @@
 openapi: '3.0.2'
 info:
-  title: API Title
+  title: Lyrics Slide Management
   version: '1.0'
 servers:
-  - url: https://api.server.test/v1
+  - url: http://localhost:8080
 
 paths:
   /lyrics:
@@ -17,14 +17,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/LyricsItem'
+                  $ref: '#/components/schemas/LyricsListItem'
     post: 
       description: 'Create New'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LyricsItemDetial'
+              $ref: '#/components/schemas/LyricsCreateRequest'
       responses:
         '200':
           description: OK
@@ -41,8 +41,7 @@ paths:
         description: "Lyrics UUID"
         required: true
         schema:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/Id'
       responses:
         '200':
           description: OK
@@ -85,27 +84,30 @@ paths:
             application/octet-stream: {}
         '404':
           description: Id not find in system
-
+  /lyrics/import:
+    post:
+      responses:
+        '200':
+          description: 'completed'
 components:
   schemas:
+    Id:
+      type: string
+      format: uuid
+      example: d290f1ee-6c54-4b01-90e6-d701748f0851
     ReurestStatus:
       type: object
       properties:
         status: 
           type: number
           example: 200
-
-    LyricsItem:
+    LyricsCreateRequest:
       type: object
-      required:
-        - name
-        - book
-        - index
+      allOf:
+        - $ref: '#/components/schemas/LyricsItem'
+        - $ref: '#/components/schemas/LyricsPages'      
+    LyricsItem: 
       properties:
-        id:
-          type: string
-          format: uuid
-          example: d290f1ee-6c54-4b01-90e6-d701748f0851
         name:
           type: string
           example: '我是主的羊'
@@ -115,9 +117,19 @@ components:
         index:
           type: string
           example: '43'
+    LyricsListItem:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/LyricsItem'
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+      
     LyricsItemDetial:
       allOf:
         - $ref: '#/components/schemas/LyricsItem'
+        - $ref: '#/components/schemas/LyricsPages'
+    LyricsPages:
       properties:
         pages:
           type: array
