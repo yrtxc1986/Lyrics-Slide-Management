@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class LyricsRequest {
    String name;
-   String book;
-   String index;
+   String bookName;
+   String bookIndex;
    String[][] pages;
 }

@@ -1,113 +1,92 @@
-openapi: '3.0.2'
+openapi: "3.0.2"
 info:
   title: Lyrics Slide Management
-  version: '1.0'
+  version: "1.0"
 servers:
   - url: http://localhost:8080
 
 paths:
   /lyrics:
     get:
-      description: 'getList'
+      description: "getList"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/LyricsListItem'
-    post: 
-      description: 'Create New'
+                  $ref: "#/components/schemas/LyricsListItem"
+    post:
+      description: "Create New"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LyricsCreateRequest'
+              $ref: "#/components/schemas/LyricsCreateRequest"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReurestStatus'
+                $ref: "#/components/schemas/ReurestStatus"
   /lyrics/{id}:
     get:
-      description: 'get Detail'
+      description: "get Detail"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "Lyrics UUID"
-        required: true
-        schema:
-          $ref: '#/components/schemas/Id'
+        - name: "id"
+          in: "path"
+          description: "Lyrics UUID"
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LyricsItemDetial'
+                $ref: "#/components/schemas/LyricsItemDetial"
     put:
-      description: 'update Lyrics'
+      description: "update Lyrics"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "Lyrics UUID"
-        required: true
-        schema:
-          $ref: '#/components/schemas/Id'
+        - name: "id"
+          in: "path"
+          description: "Lyrics UUID"
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LyricsCreateRequest'
+              $ref: "#/components/schemas/LyricsCreateRequest"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReurestStatus'
+                $ref: "#/components/schemas/ReurestStatus"
   /lyrics/{id}/download:
     get:
-      description: 'download PPTX file'
+      description: "download PPTX file"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "Lyrics UUID"
-        required: true
-        schema:
-          $ref: '#/components/schemas/Id'
+        - name: "id"
+          in: "path"
+          description: "Lyrics UUID"
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
       responses:
-        '200':
+        "200":
           description: Download PPTX file
           content:
             application/octet-stream: {}
-        '404':
+        "404":
           description: Id not find in system
-  /lyrics/import:
-    get:
-      responses:
-        '200':
-          description: Download Sample Import File
-          content:
-            application/octet-stream: {}
-    post:
-      requestBody:
-        content:
-          application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
-            schema:
-              type: string
-              format: binary
-      responses:
-        '200':
-          description: Completed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReurestStatus'
 components:
   schemas:
     Id:
@@ -117,45 +96,60 @@ components:
     ReurestStatus:
       type: object
       properties:
-        status: 
+        status:
           type: number
           example: 200
     LyricsCreateRequest:
       type: object
       allOf:
-        - $ref: '#/components/schemas/LyricsItem'
-        - $ref: '#/components/schemas/LyricsPages'      
-    LyricsItem: 
+        - $ref: "#/components/schemas/LyricsItem"
+        - $ref: "#/components/schemas/LyricsPages"
+    LyricsItem:
       properties:
         name:
           type: string
-          example: '我是主的羊'
-        book:
+          example: "我是主的羊"
+        bookName:
           type: string
-          example: '青年聖歌 III'
-        index:
+          example: "青年聖歌 III"
+        bookIndex:
           type: string
-          example: '43'
+          example: "43"
     LyricsListItem:
       type: object
       allOf:
-        - $ref: '#/components/schemas/LyricsItem'
+        - $ref: "#/components/schemas/LyricsItem"
       properties:
         id:
-          $ref: '#/components/schemas/Id'
-      
+          $ref: "#/components/schemas/Id"
+
     LyricsItemDetial:
       allOf:
-        - $ref: '#/components/schemas/LyricsItem'
-        - $ref: '#/components/schemas/LyricsPages'
+        - $ref: "#/components/schemas/LyricsItem"
+        - $ref: "#/components/schemas/LyricsPages"
     LyricsPages:
       properties:
         pages:
           type: array
+          example: [
+              [
+                "主領我到青草地，安歇在溪水旁；",
+                "黃昏時主與我一路同行，",
+                "牧場上主的羊都得飽足心快暢，我是主的羊。",
+              ],
+              [
+                "青草地（死蔭幽谷），溪水旁（高山峻嶺），",
+                "黃昏時（黃昏時），有主與我同行 (有主與我同行)。",
+                "黑暗夜（死蔭幽谷），路崎嶇（高山峻嶺），",
+                "每一步（每一步），跟隨主行 (跟隨主行)。",
+              ],
+              [
+                "主領我到青草地，安歇在溪水旁；",
+                "黃昏時主與我一路同行，",
+                "牧場上主的羊都得飽足心快暢，我是主的羊。",
+              ],
+            ]
           items:
             type: array
-            example: ['主領我到青草地，安歇在溪水旁','黃昏時主與我一路同行，','牧場上主的羊都得飽足心快暢，我是主的羊。']
-            items: 
+            items:
               type: string
-              
-              
