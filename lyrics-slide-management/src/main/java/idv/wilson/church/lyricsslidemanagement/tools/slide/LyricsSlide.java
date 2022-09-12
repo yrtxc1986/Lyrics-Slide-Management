@@ -1,9 +1,11 @@
 package idv.wilson.church.lyricsslidemanagement.tools.slide;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.geom.Rectangle2D;
-import java.nio.file.Path;
 
 import org.apache.poi.sl.usermodel.VerticalAlignment;
 import org.apache.poi.sl.usermodel.TextParagraph.TextAlign;
@@ -15,53 +17,48 @@ import org.apache.poi.xslf.usermodel.XSLFSlideMaster;
 import org.apache.poi.xslf.usermodel.XSLFTextParagraph;
 import org.apache.poi.xslf.usermodel.XSLFTextRun;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
+import org.springframework.stereotype.Component;
 
-import lombok.extern.slf4j.Slf4j;
+import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsEntity;
 
-@Slf4j
-public class Slide  {
-    private XMLSlideShow ppt;
-    private Path orgPath;
+@Component
+public class LyricsSlide {
 
-    public static Slide createNew(Path file) {
-        XMLSlideShow ppt = new XMLSlideShow();
-        return new Slide(ppt, file);
+    public Path create(LyricsEntity data) throws IOException {
+        Path tempPath = Files.createTempFile("lyric", ".pptx");
+
+        XMLSlideShow pptx = new XMLSlideShow();
+        String name = data.getName();
+        for (String[] page : data.getPages()) {
+            addPage(pptx, name,  page);
+        }
+
+        pptx.write(Files.newOutputStream(tempPath));
+
+        return tempPath;
     }
 
-    public XMLSlideShow getRaw() {
-        return ppt;
-    }
+    private void addPage(XMLSlideShow pptx, String name,  String[] contents) {
 
-    public Path getOrgPath() {
-        return orgPath;
-    }
-
-    public Slide(XMLSlideShow ppt, Path orgPath) {
-        this.ppt = ppt;
-        this.orgPath = orgPath;
-    }
-
-    public void addPage(String[] contents) {
-
-        XSLFSlide slide = createSlide(ppt);
+        XSLFSlide slide = createSlide(pptx, name);
 
         XSLFTextShape body = slide.getPlaceholder(0);
-        for(String line : contents){
-        addNewLine(body, line);
+        for (String line : contents) {
+            addNewLine(body, line);
         }
     }
 
-    private XSLFSlide createSlide(XMLSlideShow ppt) {
+    private XSLFSlide createSlide(XMLSlideShow pptx, String name) {
         Double TextMargin = 10d;
-        XSLFSlideMaster defaultMaster = ppt.getSlideMasters().get(0);
+        XSLFSlideMaster defaultMaster = pptx.getSlideMasters().get(0);
 
         // title and content
         XSLFSlideLayout titleBodyLayout = defaultMaster.getLayout(SlideLayout.TITLE_ONLY);
-        XSLFSlide slide = ppt.createSlide(titleBodyLayout);
+        XSLFSlide slide = pptx.createSlide(titleBodyLayout);
 
         slide.getBackground().setFillColor(Color.BLACK);
 
-        Dimension pageSize = ppt.getPageSize();
+        Dimension pageSize = pptx.getPageSize();
         XSLFTextShape placeholder = slide.getPlaceholder(0);
         placeholder.setAnchor(new Rectangle2D.Double(TextMargin, TextMargin, pageSize.getWidth() - (2 * TextMargin),
                 pageSize.getHeight() - (2 * TextMargin)));
@@ -80,11 +77,6 @@ public class Slide  {
 
         textRun.setText(text);
         textRun.setFontColor(Color.WHITE);
-
     }
 
-    public String readText(int page) {
-        log.debug("PPT page count:" + ppt.getSlides().size());
-        return "";
-    }
 }
