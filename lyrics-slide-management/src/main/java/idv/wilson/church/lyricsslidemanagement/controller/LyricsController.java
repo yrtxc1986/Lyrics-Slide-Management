@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import idv.wilson.church.lyricsslidemanagement.dto.lyrics.LyricsRequest;
@@ -16,7 +17,9 @@ import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsEntity;
 import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsListItem;
 import idv.wilson.church.lyricsslidemanagement.service.LyricsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/lyrics")
 @RequiredArgsConstructor
@@ -26,8 +29,13 @@ public class LyricsController {
     
     
   @GetMapping
-  public List<LyricsListItem> getList(){
-    
+  public List<LyricsListItem> getList(@RequestParam(required = false) String code, @RequestParam(required = false) Integer length){
+    if(length != null){
+      log.trace("Length enter:"+length);
+    }
+    if(code != null){
+      log.trace("code enter:"+code);
+    }
     return service.getList();
   }
 
