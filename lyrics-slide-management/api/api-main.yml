@@ -9,6 +9,17 @@ paths:
   /lyrics:
     get:
       description: "getList"
+      parameters:
+        - name: length
+          in: query
+          schema:
+            type: integer
+          description: "find by name length"
+        - name: code
+          in: query
+          schema:
+            type: string
+          description: "find by name length"
       responses:
         "200":
           description: OK
@@ -115,6 +126,10 @@ components:
         bookIndex:
           type: string
           example: "43"
+        code:
+          type: string
+          example: '05-07-01'
+          format: 'xx-xx-xx'
     LyricsListItem:
       type: object
       allOf:
