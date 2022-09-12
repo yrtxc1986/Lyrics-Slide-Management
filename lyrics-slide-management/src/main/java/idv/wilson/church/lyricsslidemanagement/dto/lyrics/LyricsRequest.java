@@ -8,4 +8,5 @@ public class LyricsRequest {
    String bookName;
    String bookIndex;
    String[][] pages;
+   String code;
 }
