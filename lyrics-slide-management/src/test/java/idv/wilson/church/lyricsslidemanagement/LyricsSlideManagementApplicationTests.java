@@ -12,19 +12,10 @@ import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsEntity;
 import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsRepository;
 import idv.wilson.church.lyricsslidemanagement.service.SlideService;
 import idv.wilson.church.lyricsslidemanagement.tools.slide.LyricsSlide;
-import idv.wilson.church.lyricsslidemanagement.tools.slide.Slide;
-import idv.wilson.church.lyricsslidemanagement.tools.slide.SlideHelper;
 
 @SpringBootTest
 class LyricsSlideManagementApplicationTests {
 
-    // @Test
-    public void addPage() {
-        SlideHelper helper = new SlideHelper();
-        Slide slide = helper.newSlide("testing.pptx");
-        slide.addPage(new String[] { "Testing Message", "Line2 Message" });
-        helper.saveSlide(slide);
-    }
 
     @Autowired
     LyricsRepository repo;
