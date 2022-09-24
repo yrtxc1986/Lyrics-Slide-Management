@@ -3,7 +3,6 @@ package idv.wilson.church.lyricsslidemanagement.tools.slide;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.geom.Rectangle2D;
 
@@ -24,10 +23,16 @@ import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsEntity;
 @Component
 public class LyricsSlide {
 
+    private final Double TextMargin = 10d;
+    private final Double FontSize = 60d;
+
     public Path create(LyricsEntity data) throws IOException {
         Path tempPath = Files.createTempFile("lyric", ".pptx");
 
-        XMLSlideShow pptx = new XMLSlideShow();
+        XMLSlideShow pptx = new XMLSlideShow();       
+        pptx.setPageSize(new Dimension(1920,1024));
+
+
         String name = data.getName();
         for (String[] page : data.getPages()) {
             addPage(pptx, name,  page);
@@ -49,34 +54,57 @@ public class LyricsSlide {
     }
 
     private XSLFSlide createSlide(XMLSlideShow pptx, String name) {
-        Double TextMargin = 10d;
+        
         XSLFSlideMaster defaultMaster = pptx.getSlideMasters().get(0);
 
         // title and content
-        XSLFSlideLayout titleBodyLayout = defaultMaster.getLayout(SlideLayout.TITLE_ONLY);
+        XSLFSlideLayout titleBodyLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
         XSLFSlide slide = pptx.createSlide(titleBodyLayout);
 
-        slide.getBackground().setFillColor(Color.BLACK);
+        slide.getBackground().setFillColor(java.awt.Color.black);
 
         Dimension pageSize = pptx.getPageSize();
         XSLFTextShape placeholder = slide.getPlaceholder(0);
-        placeholder.setAnchor(new Rectangle2D.Double(TextMargin, TextMargin, pageSize.getWidth() - (2 * TextMargin),
-                pageSize.getHeight() - (2 * TextMargin)));
+        placeholder.setAnchor(new Rectangle2D.Double(TextMargin, FontSize, pageSize.getWidth() - (2 * TextMargin),
+                pageSize.getHeight() - TextMargin-FontSize));
 
         placeholder.clearText();
         placeholder.setVerticalAlignment(VerticalAlignment.TOP);
 
+        placeholder = slide.getPlaceholder(1);
+        placeholder.setAnchor(new Rectangle2D.Double(TextMargin, (pageSize.getHeight() - FontSize-TextMargin), pageSize.getWidth() - (2 * TextMargin),
+                FontSize));
+        placeholder.clearText();
+        placeholder.setLineCap(null);
+        addName(placeholder, name);
+
         return slide;
+    }
+
+    private void addName(XSLFTextShape body, String text){
+        XSLFTextParagraph paragraph = body.addNewTextParagraph();
+        paragraph.setTextAlign(TextAlign.RIGHT);
+        paragraph.setBullet(false);
+
+        XSLFTextRun textRun = paragraph.addNewTextRun();
+
+        textRun.setFontSize(FontSize); 
+        textRun.setFontColor(java.awt.Color.white);
+        textRun.setText(text);
+
     }
 
     private void addNewLine(XSLFTextShape body, String text) {
         XSLFTextParagraph paragraph = body.addNewTextParagraph();
-        paragraph.setTextAlign(TextAlign.LEFT);
+        paragraph.setTextAlign(TextAlign.CENTER);
 
         XSLFTextRun textRun = paragraph.addNewTextRun();
 
+        //textRun.setCharacterSpacing(1.0);
+
         textRun.setText(text);
-        textRun.setFontColor(Color.WHITE);
+        textRun.setFontSize(FontSize); 
+        textRun.setFontColor(java.awt.Color.white);
     }
 
 }
