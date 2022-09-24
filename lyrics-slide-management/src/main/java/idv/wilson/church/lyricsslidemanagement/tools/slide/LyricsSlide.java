@@ -25,12 +25,14 @@ public class LyricsSlide {
 
     private final Double TextMargin = 10d;
     private final Double FontSize = 60d;
+    private final Double NameSize = 30d;
+    private final Dimension pageSize = new Dimension(1280,720);
 
     public Path create(LyricsEntity data) throws IOException {
         Path tempPath = Files.createTempFile("lyric", ".pptx");
 
         XMLSlideShow pptx = new XMLSlideShow();       
-        pptx.setPageSize(new Dimension(1920,1024));
+        pptx.setPageSize(pageSize);
 
 
         String name = data.getName();
@@ -72,8 +74,8 @@ public class LyricsSlide {
         placeholder.setVerticalAlignment(VerticalAlignment.TOP);
 
         placeholder = slide.getPlaceholder(1);
-        placeholder.setAnchor(new Rectangle2D.Double(TextMargin, (pageSize.getHeight() - FontSize-TextMargin), pageSize.getWidth() - (2 * TextMargin),
-                FontSize));
+        placeholder.setAnchor(new Rectangle2D.Double(TextMargin, (pageSize.getHeight() - NameSize-TextMargin), pageSize.getWidth() - (2 * TextMargin),
+        NameSize));
         placeholder.clearText();
         placeholder.setLineCap(null);
         addName(placeholder, name);
@@ -88,7 +90,7 @@ public class LyricsSlide {
 
         XSLFTextRun textRun = paragraph.addNewTextRun();
 
-        textRun.setFontSize(FontSize); 
+        textRun.setFontSize(NameSize); 
         textRun.setFontColor(java.awt.Color.white);
         textRun.setText(text);
 

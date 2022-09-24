@@ -1,37 +1,36 @@
 package idv.wilson.church.lyricsslidemanagement;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsEntity;
-import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsRepository;
 import idv.wilson.church.lyricsslidemanagement.service.SlideService;
 import idv.wilson.church.lyricsslidemanagement.tools.slide.LyricsSlide;
+import lombok.extern.slf4j.Slf4j;
 
-//@SpringBootTest
+@Slf4j
 class LyricsSlideManagementApplicationTests {
 
 
-    //@Autowired
-    LyricsRepository repo;
+    // //@Autowired
+    // LyricsRepository repo;
 
-    // @Test
-    public void dbTest() {
-        LyricsEntity entity = new LyricsEntity();
-        entity.setBookName("123");
+    // // @Test
+    // public void dbTest() {
+    //     LyricsEntity entity = new LyricsEntity();
+    //     entity.setBookName("123");
 
-        repo.save(entity);
+    //     repo.save(entity);
 
-        LyricsEntity entityLoad = repo.findById(entity.getId()).get();
-        assertEquals("123", entityLoad.getBookName());
-        System.out.println(entityLoad.getId().toString());
+    //     LyricsEntity entityLoad = repo.findById(entity.getId()).get();
+    //     assertEquals("123", entityLoad.getBookName());
+    //     System.out.println(entityLoad.getId().toString());
 
-    }
+    // }
 
     @Test
     public void createLyricsSldie() throws Exception{
@@ -43,6 +42,7 @@ class LyricsSlideManagementApplicationTests {
         
         LyricsSlide helper = new LyricsSlide();
         SlideService service = new SlideService(helper);
-        service.createLyricsSide(lyric);
+        Path slideFile = service.createLyricsSide(lyric);
+        log.info("Slide Path:"+slideFile.getParent().toAbsolutePath());
     }
 }
