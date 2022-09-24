@@ -1,5 +1,7 @@
 package idv.wilson.church.lyricsslidemanagement.service;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,7 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 public class LyricsService {
 
     private final LyricsRepository repo;
-
+    private final SlideService slide;
+    
     public List<LyricsListItem> getList() {
         return repo.findBy();
     }
@@ -58,5 +61,6 @@ public class LyricsService {
         }
         repo.save(record);
     }
+
 
 }
