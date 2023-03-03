@@ -5,7 +5,7 @@ import java.nio.file.Path;
 
 import org.springframework.stereotype.Service;
 
-import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsEntity;
+import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.Lyrics;
 import idv.wilson.church.lyricsslidemanagement.tools.slide.LyricsSlide;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +16,7 @@ public class SlideService{
     private final LyricsSlide slideHelper;
 
 
-    public Path createLyricsSide(LyricsEntity lyric) throws IOException{
+    public Path createLyricsSide(Lyrics lyric) throws IOException{
 
         Path tempPath = slideHelper.create(lyric);
         return tempPath;

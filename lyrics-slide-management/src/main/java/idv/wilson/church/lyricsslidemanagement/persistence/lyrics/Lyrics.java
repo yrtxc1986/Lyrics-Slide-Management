@@ -1,24 +1,15 @@
 package idv.wilson.church.lyricsslidemanagement.persistence.lyrics;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 
 import java.util.UUID;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
-import org.hibernate.annotations.GenericGenerator;
 
 @Data
-@Entity
-public class LyricsEntity {
+public class Lyrics {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-        name = "UUID",
-        strategy = "org.hibernate.id.UUIDGenerator"
-    )
     private UUID id;
 
     //字數-首字筆劃數-INDEXNUMBER

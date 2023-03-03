@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsEntity;
+import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.Lyrics;
 import idv.wilson.church.lyricsslidemanagement.service.SlideService;
 import idv.wilson.church.lyricsslidemanagement.tools.slide.LyricsSlide;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ class LyricsSlideManagementApplicationTests {
                     "[\"青草地（死蔭幽谷），溪水旁（高山峻嶺），\",\"黃昏時（黃昏時），有主與我同行 (有主與我同行)。\",\"黑暗夜（死蔭幽谷），路崎嶇（高山峻嶺），\",\"每一步（每一步），跟隨主行 (跟隨主行)。\"]]}";
         
         ObjectMapper objectMapper = new ObjectMapper();
-        LyricsEntity lyric = objectMapper.readValue(jsonObject, LyricsEntity.class);
+        Lyrics lyric = objectMapper.readValue(jsonObject, Lyrics.class);
         
         LyricsSlide helper = new LyricsSlide();
         SlideService service = new SlideService(helper);

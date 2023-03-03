@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.core.io.InputStreamResource;
@@ -21,12 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import idv.wilson.church.lyricsslidemanagement.dto.lyrics.LyricsRequest;
-import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsEntity;
+import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.Lyrics;
 import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsListItem;
 import idv.wilson.church.lyricsslidemanagement.service.LyricsService;
 import idv.wilson.church.lyricsslidemanagement.service.SlideService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
@@ -39,7 +40,9 @@ public class LyricsController {
     
     
   @GetMapping
-  public List<LyricsListItem> getList(@RequestParam(required = false) String code, @RequestParam(required = false) Integer length){
+  public Flux<LyricsListItem> getList(
+          @RequestParam(required = false) String code,
+          @RequestParam(required = false) Integer length){
     if(length != null){
       log.trace("Length enter:"+length);
     }
@@ -50,14 +53,13 @@ public class LyricsController {
   }
 
   @GetMapping("{id}")
-  public LyricsEntity getDetial(@PathVariable UUID id){
+  public Mono<Lyrics> getDetial(@PathVariable UUID id){
     return lyricsService.getDetial(id);
   }
 
   @PostMapping
-  public UUID create(@RequestBody LyricsRequest data){
-    UUID id = lyricsService.create(data);
-    return id;
+  public Mono<UUID> create(@RequestBody LyricsRequest data){
+    return lyricsService.create(data).map(Lyrics::getId);
   }
 
   @PutMapping("{id}")
@@ -68,7 +70,7 @@ public class LyricsController {
   
   @GetMapping("{id}/download")
   public ResponseEntity<InputStreamResource> download(@PathVariable UUID id) throws IOException {
-    LyricsEntity entity = lyricsService.getDetial(id);
+    Lyrics entity = lyricsService.getDetial(id).block();
     
     Path tempPPTX = slideService.createLyricsSide(entity);
     HttpHeaders headers = new HttpHeaders();

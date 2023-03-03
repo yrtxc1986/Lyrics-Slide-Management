@@ -18,7 +18,7 @@ import org.apache.poi.xslf.usermodel.XSLFTextRun;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
 import org.springframework.stereotype.Component;
 
-import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.LyricsEntity;
+import idv.wilson.church.lyricsslidemanagement.persistence.lyrics.Lyrics;
 
 @Component
 public class LyricsSlide {
@@ -28,7 +28,7 @@ public class LyricsSlide {
     private final Double NameSize = 30d;
     private final Dimension pageSize = new Dimension(1280,720);
 
-    public Path create(LyricsEntity data) throws IOException {
+    public Path create(Lyrics data) throws IOException {
         Path tempPath = Files.createTempFile("lyric", ".pptx");
 
         XMLSlideShow pptx = new XMLSlideShow();       

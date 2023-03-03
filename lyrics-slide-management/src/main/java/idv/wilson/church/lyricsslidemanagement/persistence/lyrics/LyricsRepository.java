@@ -1,12 +1,12 @@
 package idv.wilson.church.lyricsslidemanagement.persistence.lyrics;
 
-import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
 
-public interface LyricsRepository extends JpaRepository<LyricsEntity, UUID> {
+public interface LyricsRepository extends ReactiveCrudRepository<Lyrics, UUID> {
     
-    public List<LyricsListItem> findBy();
-    public List<LyricsListItem> findByNameLength(Integer lenght);
+    public Flux<LyricsListItem> findBy();
+    public Flux<LyricsListItem> findByNameLength(Integer lenght);
 }
