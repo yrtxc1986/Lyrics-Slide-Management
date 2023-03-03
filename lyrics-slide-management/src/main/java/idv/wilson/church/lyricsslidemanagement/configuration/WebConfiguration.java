@@ -1,14 +1,17 @@
 package idv.wilson.church.lyricsslidemanagement.configuration;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.reactive.config.CorsRegistry;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 @Configuration
-public class WebConfiguration implements WebMvcConfigurer {
+public class WebConfiguration implements WebFluxConfigurer {
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedMethods("*");
+    public void addCorsMappings(CorsRegistry corsRegistry){
+        corsRegistry.addMapping("/**")
+                .allowedMethods("*")
+                .maxAge(3600);
     }
+
 }
