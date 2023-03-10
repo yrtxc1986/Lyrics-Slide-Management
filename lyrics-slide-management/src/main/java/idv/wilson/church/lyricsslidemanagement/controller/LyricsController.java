@@ -2,6 +2,7 @@ package idv.wilson.church.lyricsslidemanagement.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
@@ -76,13 +77,13 @@ public class LyricsController {
     HttpHeaders headers = new HttpHeaders();
     
     String filename = entity.getName()+".pptx";
-    headers.setContentDispositionFormData("attachment", new String(filename.getBytes("UTF-8"),"iso-8859-1"));
+    headers.setContentDispositionFormData("attachment", new String(filename.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
     headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 
     InputStream inputStream = Files.newInputStream(tempPPTX);
     InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
     headers.setContentLength(Files.size(tempPPTX));
-    return new ResponseEntity<InputStreamResource>(inputStreamResource, headers, HttpStatus.OK);
+    return new ResponseEntity<>(inputStreamResource, headers, HttpStatus.OK);
   }
 
 }
